@@ -1,0 +1,44 @@
+name: env-php # プロジェクト名（docker compose v2以降の構文）
+
+services:
+  # Webサーバコンテナ（Nginx）
+  web:
+    build:
+      context: ./nginx # nginx用のDockerfileがあるディレクトリ
+      dockerfile: Dockerfile # 使用するDockerfile名
+    ports:
+      - 8080:80 # ホストの8080ポートをNginxの80番ポートにマッピング
+    volumes:
+      - ./src:/app # ソースコード（src）を/appにマウント（PHPと共有）
+    container_name: nginx # コンテナ名を「nginx」に設定
+    hostname: nginx-host # コンテナ内でのホスト名を設定（オプション）
+
+  # アプリケーションサーバコンテナ（PHP-FPM）
+  app:
+    build:
+      context: ./php # php用のDockerfileがあるディレクトリ
+      dockerfile: Dockerfile # 使用するDockerfile名
+    container_name: php # コンテナ名を「php」に設定
+    hostname: php-host # コンテナ内でのホスト名を設定（オプション）
+    volumes:
+      - ./src:/app # ソースコードをPHPにもマウント（Nginxと共有）
+
+  # データベースコンテナ（PostgreSQL）
+  db:
+    build:
+      context: ./postgres # postgres用のDockerfileがあるディレクトリ
+      dockerfile: Dockerfile # 使用するDockerfile名
+      args:
+        POSTGRES_DB: postgres # 初期作成されるDB名
+        POSTGRES_USER: postgres # DBユーザー名
+        POSTGRES_PASSWORD: postgres # DBユーザーパスワード
+    container_name: postgres # コンテナ名を「postgres」に設定
+    restart: always # コンテナが落ちたときに自動再起動
+    ports:
+      - 5432:5432 # ホストの5432ポートをDBの5432ポートにマッピング
+    volumes:
+      - db-data:/var/lib/postgresql/data # 永続化用ボリュームをマウント（データ保持）
+
+# ボリューム定義（PostgreSQLのデータ永続化用）
+volumes:
+  db-data:
