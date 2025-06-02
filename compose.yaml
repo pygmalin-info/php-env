@@ -29,9 +29,9 @@ services:
       context: ./docker/postgres # postgres用のDockerfileがあるディレクトリ
       dockerfile: Dockerfile # 使用するDockerfile名
       args:
-        POSTGRES_DB: postgres # 初期作成されるDB名
-        POSTGRES_USER: postgres # DBユーザー名
-        POSTGRES_PASSWORD: postgres # DBユーザーパスワード
+        POSTGRES_DB: ${POSTGRES_DB} # 初期作成されるDB名
+        POSTGRES_USER: ${POSTGRES_USER} # DBユーザー名
+        POSTGRES_PASSWORD: ${POSTGRES_PASSWOR} # DBユーザーパスワード
     container_name: postgres # コンテナ名を「postgres」に設定
     restart: always # コンテナが落ちたときに自動再起動
     ports:
