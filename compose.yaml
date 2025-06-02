@@ -4,7 +4,7 @@ services:
   # Webサーバコンテナ（Nginx）
   web:
     build:
-      context: ./nginx # nginx用のDockerfileがあるディレクトリ
+      context: ./docker/nginx # nginx用のDockerfileがあるディレクトリ
       dockerfile: Dockerfile # 使用するDockerfile名
     ports:
       - 8080:80 # ホストの8080ポートをNginxの80番ポートにマッピング
@@ -16,7 +16,7 @@ services:
   # アプリケーションサーバコンテナ（PHP-FPM）
   app:
     build:
-      context: ./php # php用のDockerfileがあるディレクトリ
+      context: ./docker/php # php用のDockerfileがあるディレクトリ
       dockerfile: Dockerfile # 使用するDockerfile名
     container_name: php # コンテナ名を「php」に設定
     hostname: php-host # コンテナ内でのホスト名を設定（オプション）
@@ -26,7 +26,7 @@ services:
   # データベースコンテナ（PostgreSQL）
   db:
     build:
-      context: ./postgres # postgres用のDockerfileがあるディレクトリ
+      context: ./docker/postgres # postgres用のDockerfileがあるディレクトリ
       dockerfile: Dockerfile # 使用するDockerfile名
       args:
         POSTGRES_DB: postgres # 初期作成されるDB名
